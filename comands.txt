@@ -1,0 +1,97 @@
+**** Instalações ******
+
+1 - instalar o webpack e toddas suas dependencias
+
+
+npm install --save-dev webpack webpack-cli webpack-dev-server html-webpack-plugin babel-loader 
+
+----------------------------------------------------------------------------------------------
+2 - packages para o babel  
+
+npm install --save-dev @babel/core @babel/preset-env @babel/preset-react @babel/preset-typescript
+
+----------------------------------------------------------------------------------------------
+3 - instalar o typescript e suas tipagens
+
+npm install --save-dev typescript @types/react @types/react-dom
+
+----------------------------------------------------------------------------------------------
+4 - instalar o react e o react dom
+
+npm install --save-dev react react-dom
+
+***** Folders ****
+
+build-tools
+build-tools/webpack.config.js
+src
+src/index.tsx
+src/index.html 
+tsconfig.json
+.babelrc
+
+
+**** Configurações ****
+
+.babelrs => {
+    colocar um objeto preset com um array contendo os presets instalados no passo 2,
+}
+
+tsconfig.json => {
+    
+    "compilerOptions": {
+        "target": "ES5", 
+        "module": "CommonJs",
+        "jsx": "react",
+        "sourceMap": true,
+        "outDir": "./dist",
+        "removeComments": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "preserveConstEnums": true
+    },
+    "include": [
+        "./src/**/**"
+    ]
+
+}
+
+webpack.config.js () =>{
+    const path = require('path')
+    const HtmlWebPackPlugin = requuire('html-webpack-plugin')
+    
+    module.exports ={
+        entry:{
+            app:['./src/index.tsx'],
+            vendor: [ 'react', 'react-dom']
+        },
+        output: {
+            path: path.resolve(__dirname, 'dist'),
+            filename: 'js/[name],bundle.js'
+        },
+        devtool: 'source-map',
+        resolve: {
+            extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
+        },
+        devServer:{
+            contentBase: './dist',
+            port: 8000
+        },
+        module:{
+            rules: [
+                {
+                    test: /\.(ts|js)x?$/,
+                    exclude: '/node_modules',
+                    loader: 'babel-loader',
+                }
+            ]
+        },
+        plugins: [
+            new HtmlWebPackPlugin({
+                template: './src/index.html'
+            })
+        ]
+    }
+
+
+}
